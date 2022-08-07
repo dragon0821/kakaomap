@@ -1,0 +1,86 @@
+﻿<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fb3972a5da3b0aa20c897c574603faa5&libraries=services"></script> 
+
+
+
+
+<!DOCTYPE html>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">    
+<style type="text/css">
+html, body { width: 99%; height: 98%; }
+</style>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지도 생성하기</title>
+</head>
+<body>
+<div id="map" style="width:100%; height:100%; "></div>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=API_KEY&libraries=services"></script>
+<script>
+var mapContainer = document.getElementById('map'), mapOption = { center: new kakao.maps.LatLng(33.450701, 126.570667), level: 4 };
+var map = new kakao.maps.Map(mapContainer, mapOption);
+
+function moveTo(lat, lng) {
+    var loc = new kakao.maps.LatLng(lat, lng);
+    map.setCenter(loc);
+}
+
+function panTo(lat, lng) {
+    var loc = new kakao.maps.LatLng(lat, lng);
+    map.panTo(loc);
+}
+
+function zoomIn()
+{
+var level = map.getLevel();
+map.setLevel(level-1);
+}
+
+function zoomOut()
+{
+var level = map.getLevel();
+map.setLevel(level+1);
+}
+
+function geo(address) {  
+var geocoder = new kakao.maps.services.Geocoder();
+geocoder.addressSearch(address, function(result, status)
+{
+     if (status === kakao.maps.services.Status.OK) {
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        var marker = new kakao.maps.Marker({ map: map, position: coords });
+        var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">여기!!</div>'
+        });
+        infowindow.open(map, marker);
+        map.setCenter(coords);
+    }
+});
+  }
+
+function marker()
+{
+
+// 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시합니다
+var linePath = [
+    new kakao.maps.LatLng(33.452344169439975, 126.56878163224233),
+    new kakao.maps.LatLng(33.452739313807456, 126.5709308145358),
+    new kakao.maps.LatLng(33.45178067090639, 126.5726886938753) 
+];
+
+// 지도에 표시할 선을 생성합니다
+var polyline = new kakao.maps.Polyline({
+    path: linePath, // 선을 구성하는 좌표배열 입니다
+    strokeWeight: 5, // 선의 두께 입니다
+    strokeColor: '#FFAE00', // 선의 색깔입니다
+    strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+    strokeStyle: 'solid' // 선의 스타일입니다
+});
+
+// 지도에 선을 표시합니다 
+polyline.setMap(map);  
+}
+
+</script>
+</body>
+</html>
